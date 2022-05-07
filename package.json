@@ -1,0 +1,19 @@
+{
+  "name": "system",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": {
+    "packages": [
+      "packages/notion-db-to-sqlite",
+      "packages/invoicerator",
+      "packages/tinylog"
+    ],
+    "nohoist": [
+      "**/eslint",
+      "**/eslint-scope",
+      "**/eslint-plugin-jest",
+      "**/@babel",
+      "**/@babel/preset-env"
+    ]
+  }
+}

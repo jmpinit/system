@@ -1,0 +1,10 @@
+{
+  "env": {
+    "browser": false
+  },
+  "extends": "airbnb",
+  "rules": {
+    "no-console": 0,
+    "object-curly-newline": 0
+  }
+}

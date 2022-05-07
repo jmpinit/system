@@ -1,0 +1,38 @@
+{
+  "name": "notion-db-to-sqlite",
+  "version": "1.0.0",
+  "description": "Convert a Notion Database to a SQLite database",
+  "main": "index.js",
+  "repository": "https://github.com/jmpinit/system",
+  "author": "Owen Trueblood",
+  "license": "MIT",
+  "private": true,
+  "preferGlobal": true,
+  "bin": {
+    "notion-db-to-sqlite": "bin/notion-db-to-sqlite.js"
+  },
+  "scripts": {
+    "test": "node ../../node_modules/jest/bin/jest.js"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.17.2",
+    "@babel/eslint-parser": "^7.17.0",
+    "@babel/preset-env": "^7.16.11",
+    "eslint": "^7.32.0 || ^8.2.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-jest": "^26.1.0",
+    "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-react": "^7.28.0",
+    "eslint-plugin-react-hooks": "^4.3.0",
+    "jest": "^27.5.1"
+  },
+  "dependencies": {
+    "@notionhq/client": "^0.4.13",
+    "ajv": "^8.11.0",
+    "commander": "^9.2.0",
+    "js-yaml": "^4.1.0",
+    "sqlite3": "^5.0.2",
+    "sqlstring": "^2.3.2"
+  }
+}

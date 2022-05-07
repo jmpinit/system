@@ -1,0 +1,31 @@
+{
+  "name": "invoicerator",
+  "version": "1.0.0",
+  "description": "Generate PDF invoices from time logs",
+  "main": "index.js",
+  "repository": "https://github.com/jmpinit/system",
+  "author": "Owen Trueblood",
+  "license": "MIT",
+  "private": true,
+  "preferGlobal": true,
+  "bin": {
+    "invoicerator": "bin/invoicerator.js"
+  },
+  "dependencies": {
+    "ajv": "^8.10.0",
+    "commander": "^9.0.0",
+    "js-yaml": "^4.1.0",
+    "mustache": "^2.3.0",
+    "puppeteer": "^0.13.0",
+    "sqlite3": "^5.0.2",
+    "tmp": "^0.0.33"
+  },
+  "devDependencies": {
+    "eslint": "^7.32.0 || ^8.2.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-react": "^7.28.0",
+    "eslint-plugin-react-hooks": "^4.3.0"
+  }
+}

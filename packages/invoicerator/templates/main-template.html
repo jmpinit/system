@@ -1,0 +1,134 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+    <style>
+      body {
+        width: 100%;
+        margin: 2em 0 2em 0;
+      }
+
+      @page {
+        margin: 20mm 15mm 20mm 5mm;
+      }
+
+      .container {
+        margin-left: 2em;
+        margin-right: 2em;
+      }
+
+      h1 {
+        font-size: 2rem;
+      }
+
+      table {
+        border-collapse: separate;
+        vertical-align: top;
+      }
+
+      .section {
+        margin-top: 2em;
+      }
+
+      .timestamp {
+        display: block;
+      }
+
+      .project-summary {
+
+      }
+
+      .time-log td:nth-child(2) {
+        width: 4em;
+      }
+
+      .payment-method {
+        page-break-inside: avoid;
+        margin: auto;
+        width: 75%;
+      }
+
+      .key-value td:first-child {
+        font-weight: bold;
+      }
+
+      td {
+        page-break-inside: avoid;
+        padding-right: 2em;
+        min-width: 7em;
+        vertical-align: top;
+      }
+    </style>
+</head>
+<body>
+  <div class="container">
+    <h1>INVOICE: {{ myName }} <i class="fa fa-arrow-right" aria-hidden="true"></i> {{ client }}</h1>
+
+    <div class="timestamp">
+      <p>
+        Issued on {{ issueDate }}.<br>
+        For work from {{ startDate }} through {{ endDate }}.
+      </p>
+    </div>
+
+    <div class="section">
+      <h4>Overview</h4>
+
+      <table class="key-value">
+        <tr><td>From:</td><td>{{ myName }}</td></tr>
+        <tr><td>Hours:</td><td>{{ totalHours }} hours</td></tr>
+        <tr><td>Rate:</td><td>${{ rate }}/hr</td></tr>
+        <tr><td>Payment due:</td><td>${{ paymentDue }}</td></tr>
+        <tr><td>Payment method:</td><td>{{ paymentMethod }}</td></tr>
+      </table>
+    </div>
+
+    <div class="section">
+      <h4>Project Summary</h4>
+
+      <div class="project-summary">
+        <table>
+          <tr><th>Project</th><th>Hours</th><th>Cost</th></tr>
+          {{#projectSummary}}
+          <tr><td>{{ project }}</td><td>{{ hours }}</td><td>{{ cost }}</td></tr>
+          {{/projectSummary}}
+        </table>
+      </div>
+    </div>
+
+    <div class="section">
+      <h4>Time Log</h4>
+
+      <div class="time-log">
+        <table>
+          <tr><th>Project</th><th>Hours</th><th>Description</th></tr>
+          {{#timeLog}}
+          <tr><td>{{ Project }}</td><td>{{ Hours }}</td></td><td>{{ Description }}</td></tr>
+          {{/timeLog}}
+        </table>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="payment-method">
+        {{#paymentInfo}}
+        <div class="card">
+          <div class="card-body">
+            {{{ . }}}
+          </div>
+        </div>
+        {{/paymentInfo}}
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+</body>
+</html>
