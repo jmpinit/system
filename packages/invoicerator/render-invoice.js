@@ -6,7 +6,7 @@ const fs = require('fs/promises');
 const path = require('path');
 const puppeteer = require('puppeteer');
 const Mustache = require('mustache');
-const { makeTempFile, fileExists } = require('./util');
+const { makeTempFile, fileExists, roundTwo } = require('./util');
 
 function formatDate(date) {
   return date.toLocaleDateString('en-US');
@@ -33,6 +33,12 @@ async function renderToPDF(pagePath, pdfPath) {
 }
 
 async function renderInvoice(templateFilePath, startDate, endDate, timeLog, config, outputPath) {
+  // Format the time log
+  const formattedTimeLog = timeLog.map(({ Description, Hours }) => ({
+    Description,
+    Hours: roundTwo(Hours),
+  }));
+
   // Calculate report values
 
   const issueDate = formatDate(new Date()); // Today
@@ -50,8 +56,8 @@ async function renderInvoice(templateFilePath, startDate, endDate, timeLog, conf
   const projectSummary = Object.entries(hoursByProject)
     .map(([project, hours]) => ({
       project,
-      hours: hours.toFixed(2),
-      cost: `$${(hours * config.client.rate).toFixed(2)}`,
+      hours: roundTwo(hours),
+      cost: `$${roundTwo(hours * config.client.rate)}`,
     }));
 
   // Fill in the payment details
@@ -75,12 +81,12 @@ async function renderInvoice(templateFilePath, startDate, endDate, timeLog, conf
     startDate: formatDate(startDate),
     endDate: formatDate(endDate),
     myName: config.user.name,
-    totalHours,
+    totalHours: roundTwo(totalHours),
     rate: config.client.rate,
-    paymentDue,
+    paymentDue: roundTwo(paymentDue),
     paymentMethod: 'Direct Deposit',
     projectSummary,
-    timeLog,
+    timeLog: formattedTimeLog,
     paymentInfo,
   });
   await fs.writeFile(htmlPath, templated, 'utf-8');

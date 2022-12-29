@@ -65,7 +65,6 @@ function loadConfig(fileNames) {
 }
 
 async function main() {
-  console.log('test');
   const program = new Command();
 
   program
@@ -74,7 +73,7 @@ async function main() {
     .version('1.0.0')
     .option('--start <date>', 'Start date', parseDate, new Date(0))
     .option('--end <date>', 'End date (inclusive)', parseDate, new Date())
-    .requiredOption('--configs <configs...>', 'Configuration file')
+    .requiredOption('--configs <configs...>', 'Configuration files')
     .option('--output <name>', 'Output PDF path', 'invoice.pdf')
     .argument('<sqlite time log>')
     .action(async (timeLogPath, options) => {

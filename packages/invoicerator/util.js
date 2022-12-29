@@ -25,7 +25,12 @@ function fileExists(filePath) {
   });
 }
 
+function roundTwo(num) {
+  return (Math.round(num * 100) / 100).toFixed(2);
+}
+
 module.exports = {
   makeTempFile,
   fileExists,
+  roundTwo,
 };
