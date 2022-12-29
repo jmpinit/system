@@ -1,11 +1,11 @@
-const fs = require('fs/promises');
-const { constants } = require('fs');
+const fs = require('fs');
 const yaml = require('js-yaml');
 const Ajv = require('ajv');
 const { Command } = require('commander');
 const { Client } = require('@notionhq/client');
 const sqlite3 = require('sqlite3');
 const { escape } = require('sqlstring');
+const { fileExists } = require('./util');
 
 const configSchema = {
   type: 'object',
@@ -13,25 +13,25 @@ const configSchema = {
     notion: {
       type: 'object',
       properties: {
-        database: { type: 'string' },
         secret: { type: 'string' },
       },
-      required: ['database', 'secret'],
+      required: ['secret'],
+    },
+    client: {
+      type: 'object',
+      properties: {
+        database: { type: 'string' },
+      },
+      required: ['database'],
     },
   },
-  additionalProperties: false,
 };
 
-async function loadConfig(fileNames) {
-  return yaml.load(await fs.readFile(fileNames, 'utf8'));
-}
-
-function fileExists(filePath) {
-  return new Promise((fulfill) => {
-    fs.access(filePath, constants.F_OK)
-      .then(() => fulfill(true))
-      .catch(() => fulfill(false));
-  });
+function loadConfig(fileNames) {
+  return fileNames.reduce((config, fn) => {
+    const part = yaml.load(fs.readFileSync(fn, 'utf8'));
+    return { ...config, ...part };
+  }, {});
 }
 
 /**
@@ -336,18 +336,14 @@ function main() {
     .name('notion-db-to-sqlite')
     .description('Notion database to sqlite3 database')
     .version('1.0.0')
-    .requiredOption('--config <config>', 'Configuration file')
+    .requiredOption('--configs <configs...>', 'Configuration files')
     .option('--output <name>', 'Output PDF path', 'timelog.sqlite3')
     .action(async (options) => {
-      if (!(await fileExists(options.config))) {
-        program.error('Configuration file does not exist');
-      }
-
       if (await fileExists(options.output)) {
         program.error('File already exists at output path');
       }
 
-      const config = await loadConfig(options.config);
+      const config = loadConfig(options.configs);
 
       const ajv = new Ajv();
       const validateConfig = ajv.compile(configSchema);
@@ -358,7 +354,7 @@ function main() {
         program.error('Config invalid');
       }
 
-      await dbToSqlite(options.output, config.notion.database, config.notion.secret);
+      await dbToSqlite(options.output, config.client.database, config.notion.secret);
 
       console.log(`Wrote database to ${options.output}`);
     });
