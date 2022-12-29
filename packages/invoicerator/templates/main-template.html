@@ -17,6 +17,8 @@
       }
 
       .container {
+        display: flex;
+        flex-direction: column;
         margin-left: 2em;
         margin-right: 2em;
       }
@@ -26,11 +28,14 @@
       }
 
       table {
+        width: 100%;
         border-collapse: separate;
         vertical-align: top;
       }
 
       .section {
+        display: flex;
+        flex-direction: column;
         margin-top: 2em;
       }
 
@@ -42,10 +47,6 @@
 
       }
 
-      .time-log td:nth-child(2) {
-        width: 4em;
-      }
-
       .payment-method {
         page-break-inside: avoid;
         margin: auto;
@@ -54,6 +55,10 @@
 
       .key-value td:first-child {
         font-weight: bold;
+      }
+
+      .hours {
+        width: 4em;
       }
 
       td {
@@ -87,6 +92,7 @@
       </table>
     </div>
 
+    {{#displayProject}}
     <div class="section">
       <h4>Project Summary</h4>
 
@@ -99,15 +105,16 @@
         </table>
       </div>
     </div>
+    {{/displayProject}}
 
     <div class="section">
       <h4>Time Log</h4>
 
       <div class="time-log">
         <table>
-          <tr><th>Project</th><th>Hours</th><th>Description</th></tr>
+          <tr>{{#displayProject}}<th>Project</th>{{/displayProject}}<th class="hours">Hours</th><th>Description</th></tr>
           {{#timeLog}}
-          <tr><td>{{ Project }}</td><td>{{ Hours }}</td></td><td>{{ Description }}</td></tr>
+          <tr>{{#displayProject}}<td>{{ Project }}</td>{{/displayProject}}<td class="hours">{{ Hours }}</td><td>{{ Description }}</td></tr>
           {{/timeLog}}
         </table>
       </div>

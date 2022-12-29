@@ -25,6 +25,12 @@ const configSchema = {
       properties: {
         name: { type: 'string' },
         rate: { type: 'number' },
+        fields: {
+          type: 'array',
+          items: {
+            type: 'string',
+          },
+        },
       },
       required: ['name', 'rate'],
     },

@@ -33,6 +33,10 @@ async function renderToPDF(pagePath, pdfPath) {
 }
 
 async function renderInvoice(templateFilePath, startDate, endDate, timeLog, config, outputPath) {
+  const displayProject = config.client.fields === undefined
+    ? true
+    : config.client.fields.indexOf('Project') !== -1;
+
   // Format the time log
   const formattedTimeLog = timeLog.map(({ Description, Hours }) => ({
     Description,
@@ -55,7 +59,7 @@ async function renderInvoice(templateFilePath, startDate, endDate, timeLog, conf
 
   const projectSummary = Object.entries(hoursByProject)
     .map(([project, hours]) => ({
-      project,
+      project: displayProject ? project : undefined,
       hours: roundTwo(hours),
       cost: `$${roundTwo(hours * config.client.rate)}`,
     }));
@@ -85,7 +89,8 @@ async function renderInvoice(templateFilePath, startDate, endDate, timeLog, conf
     rate: config.client.rate,
     paymentDue: roundTwo(paymentDue),
     paymentMethod: 'Direct Deposit',
-    projectSummary,
+    displayProject,
+    projectSummary: displayProject ? projectSummary : undefined,
     timeLog: formattedTimeLog,
     paymentInfo,
   });
