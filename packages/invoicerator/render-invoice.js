@@ -64,6 +64,9 @@ async function renderInvoice(templateFilePath, startDate, endDate, timeLog, conf
       cost: `$${roundTwo(hours * config.client.rate)}`,
     }));
 
+  // Sort the projects in the summary by hours in descending order
+  projectSummary.sort((a, b) => (parseFloat(a.hours) < parseFloat(b.hours) ? 1 : -1));
+
   // Fill in the payment details
 
   const paymentInfoTemplate = await getPaymentTemplate('pay-by-direct-deposit');
