@@ -32,13 +32,13 @@ async function renderToPDF(pagePath, pdfPath) {
   await browser.close();
 }
 
-async function renderInvoice(templateFilePath, startDate, endDate, timeLog, config, outputPath) {
+async function renderInvoiceHTML(templateFilePath, startDate, endDate, timeLog, config) {
   const displayProject = config.client.fields === undefined
     ? true
     : config.client.fields.indexOf('Project') !== -1;
 
   // Format the time log
-  const formattedTimeLog = timeLog.map(({ Project, Description, Hours }) => ({
+  const formattedTimeLog = timeLog.map(({Project, Description, Hours}) => ({
     Project,
     Description,
     Hours: roundTwo(Hours),
@@ -55,7 +55,7 @@ async function renderInvoice(templateFilePath, startDate, endDate, timeLog, conf
 
   const hoursByProject = timeLog.reduce((projects, entry) => {
     const hours = (projects[entry.Project] || 0) + entry.Minutes / 60;
-    return { ...projects, [entry.Project]: hours };
+    return {...projects, [entry.Project]: hours};
   }, {});
 
   const projectSummary = Object.entries(hoursByProject)
@@ -74,8 +74,7 @@ async function renderInvoice(templateFilePath, startDate, endDate, timeLog, conf
   const paymentInfo = Mustache.render(paymentInfoTemplate, config);
 
   // Create a temporary HTML file to fill with the data for the invoice
-  // const htmlPath = await makeTempFile({ postfix: '.html' });
-  const htmlPath = '/tmp/index.html';
+  const htmlPath = await makeTempFile({ postfix: '.html' });
 
   // Read the template and fill it with the invoice data
 
@@ -98,12 +97,20 @@ async function renderInvoice(templateFilePath, startDate, endDate, timeLog, conf
     timeLog: formattedTimeLog,
     paymentInfo,
   });
+
   await fs.writeFile(htmlPath, templated, 'utf-8');
+
+  return htmlPath;
+}
+
+async function renderInvoicePDF(templateFilePath, startDate, endDate, timeLog, config, outputPath) {
+  const htmlPath = await renderInvoiceHTML(templateFilePath, startDate, endDate, timeLog, config);
 
   // Render the templated HTML page and save as PDF
   await renderToPDF(htmlPath, outputPath);
 }
 
 module.exports = {
-  renderInvoice,
+  renderInvoicePDF,
+  renderInvoiceHTML,
 };

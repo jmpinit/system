@@ -5,7 +5,7 @@ const yaml = require('js-yaml');
 const { Command } = require('commander');
 const Ajv = require('ajv');
 const { getEntriesBetween } = require('./from-sqlite3');
-const { renderInvoice } = require('./render-invoice');
+const { renderInvoicePDF } = require('./render-invoice');
 const { fileExists } = require('./util');
 
 const templateFilePath = path.join(__dirname, './templates/main-template.html');
@@ -100,7 +100,7 @@ async function main() {
 
       const db = new sqlite3.Database(timeLogPath);
       const timeLogEntries = await getEntriesBetween(db, options.start, options.end);
-      await renderInvoice(
+      await renderInvoicePDF(
         templateFilePath,
         options.start,
         options.end,
