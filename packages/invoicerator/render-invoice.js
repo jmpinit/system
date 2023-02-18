@@ -38,7 +38,8 @@ async function renderInvoice(templateFilePath, startDate, endDate, timeLog, conf
     : config.client.fields.indexOf('Project') !== -1;
 
   // Format the time log
-  const formattedTimeLog = timeLog.map(({ Description, Hours }) => ({
+  const formattedTimeLog = timeLog.map(({ Project, Description, Hours }) => ({
+    Project,
     Description,
     Hours: roundTwo(Hours),
   }));
