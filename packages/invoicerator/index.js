@@ -110,7 +110,7 @@ async function main() {
       );
       db.close();
 
-      console.log(`Generated ${options.output}`);
+      console.log(`Generated "${options.output}"`);
     });
 
   program.parse();
