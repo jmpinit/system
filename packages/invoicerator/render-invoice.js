@@ -9,7 +9,10 @@ const Mustache = require('mustache');
 const { makeTempFile, fileExists, roundTwo } = require('./util');
 
 function formatDate(date) {
-  return date.toLocaleDateString('en-US');
+  // HACK:
+  // Dates are assumed to be recorded in America/New_York time but are stored as UTC
+  // so when we format them we need to use a timezone with a UTC offset of zero
+  return date.toLocaleDateString('en-US', { timeZone: 'Africa/Abidjan' });
 }
 
 async function getPaymentTemplate(paymentMethod) {
