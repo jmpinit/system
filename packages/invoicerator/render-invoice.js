@@ -61,6 +61,14 @@ async function renderInvoiceHTML(templateFilePath, startDate, endDate, timeLog, 
     return {...projects, [entry.Project]: hours};
   }, {});
 
+  // Find when the work started and ended exactly
+  // This can be different than the window of time specified to search for work
+  const workDates = timeLog.map((entry) => entry.Date);
+  const workStartDate = new Date(Math.min(...workDates));
+  const workEndDate = new Date(Math.max(...workDates));
+  // const workStartDate = startDate;
+  // const workEndDate = endDate;
+
   const projectSummary = Object.entries(hoursByProject)
     .map(([project, hours]) => ({
       project: displayProject ? project : undefined,
@@ -88,8 +96,10 @@ async function renderInvoiceHTML(templateFilePath, startDate, endDate, timeLog, 
   const templated = Mustache.render(template, {
     client: config.client.name,
     issueDate,
-    startDate: formatDate(startDate),
-    endDate: formatDate(endDate),
+    // Handle the case where all the work happened on one day
+    sameDay: workStartDate.getTime() === workEndDate.getTime(),
+    startDate: formatDate(workStartDate),
+    endDate: formatDate(workEndDate),
     myName: config.user.name,
     totalHours: roundTwo(totalHours),
     rate: config.client.rate,
