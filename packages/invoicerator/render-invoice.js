@@ -81,8 +81,12 @@ async function renderInvoiceHTML(templateFilePath, startDate, endDate, timeLog, 
 
   // Fill in the payment details
 
-  const paymentInfoTemplate = await getPaymentTemplate('pay-by-direct-deposit');
-  const paymentInfo = Mustache.render(paymentInfoTemplate, config);
+  let paymentInfo; // Payment info is optional
+
+  if (config.client.paymentMethod !== undefined) {
+    const paymentInfoTemplate = await getPaymentTemplate(config.client.paymentMethod);
+    paymentInfo = Mustache.render(paymentInfoTemplate, config);
+  }
 
   // Create a temporary HTML file to fill with the data for the invoice
   const htmlPath = await makeTempFile({ postfix: '.html' });
@@ -104,7 +108,6 @@ async function renderInvoiceHTML(templateFilePath, startDate, endDate, timeLog, 
     totalHours: roundTwo(totalHours),
     rate: config.client.rate,
     paymentDue: roundTwo(paymentDue),
-    paymentMethod: 'Direct Deposit',
     displayProject,
     projectSummary: displayProject ? projectSummary : undefined,
     timeLog: formattedTimeLog,
