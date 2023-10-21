@@ -3,7 +3,7 @@ const fs = require('fs');
 const { renderInvoiceHTML } = require('../render-invoice');
 
 test('Generate HTML for each template', () => {
-  const templateDir = path.join(__dirname, '../templates');
+  const templateDir = path.join(__dirname, '../templates/payment-methods');
   const templateFiles = fs.readdirSync(templateDir)
     .map((file) => path.join(templateDir, file));
 

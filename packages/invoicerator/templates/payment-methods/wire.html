@@ -1,0 +1,20 @@
+<h4 class="card-title"><i class="fa fa-info-circle" aria-hidden="true"></i> Paying by Wire</h4>
+
+<h4 class="card-title">Information:</h4>
+<table>
+  <tr><td>Receiving Financial Institution</td><td>{{financial.directDeposit.receivingInstitution}}</td></tr>
+  <tr><td>ABA Routing Number</td><td>{{financial.directDeposit.abaRoutingNumber}}</td></tr>
+  <tr><td>Beneficiary</td><td>{{financial.bank.name}}</td></tr>
+  <tr><td>ABA Routing Number</td><td>{{financial.bank.routingNumber}}</td></tr>
+  <tr><td>Account Number</td><td>{{financial.bank.accountNumber}}</td></tr>
+</table>
+
+<br>
+
+<h4 class="card-title">Notes: </h4>
+<ul>
+    {{#financial.directDeposit.notes}}
+    <li>{{note}}</li>
+    {{/financial.directDeposit.notes}}
+</ul>
+</p>

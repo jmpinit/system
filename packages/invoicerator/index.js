@@ -3,55 +3,12 @@ const fs = require('fs');
 const sqlite3 = require('sqlite3');
 const yaml = require('js-yaml');
 const { Command } = require('commander');
-const Ajv = require('ajv');
 const { getEntriesBetween } = require('./from-sqlite3');
 const { renderInvoicePDF } = require('./render-invoice');
 const { fileExists } = require('./util');
+const { validateConfig } = require('./config');
 
 const templateFilePath = path.join(__dirname, './templates/main-template.html');
-
-const configSchema = {
-  type: 'object',
-  properties: {
-    user: {
-      type: 'object',
-      properties: {
-        name: { type: 'string' },
-      },
-      required: ['name'],
-    },
-    client: {
-      type: 'object',
-      properties: {
-        name: { type: 'string' },
-        rate: { type: 'number' },
-        fields: {
-          type: 'array',
-          items: {
-            type: 'string',
-          },
-        },
-      },
-      required: ['name', 'rate'],
-    },
-    financial: {
-      type: 'object',
-      properties: {
-        bank: {
-          type: 'object',
-          properties: {
-            name: { type: 'string' },
-            routingNumber: { type: 'string' },
-            accountNumber: { type: 'string' },
-          },
-          required: ['name', 'routingNumber', 'accountNumber'],
-        },
-      },
-    },
-  },
-  required: ['user', 'client'],
-  additionalProperties: false,
-};
 
 function parseDate(dateString) {
   const millis = Date.parse(dateString);
@@ -89,8 +46,6 @@ async function main() {
 
       const config = loadConfig(options.configs);
 
-      const ajv = new Ajv();
-      const validateConfig = ajv.compile(configSchema);
       const configValid = validateConfig(config);
 
       if (!configValid) {

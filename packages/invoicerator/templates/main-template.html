@@ -78,7 +78,12 @@
     <div class="timestamp">
       <p>
         Issued on {{ issueDate }}.<br>
+        {{#sameDay}}
+        For work on {{ startDate }}.
+        {{/sameDay}}
+        {{^sameDay}}
         For work from {{ startDate }} through {{ endDate }}.
+        {{/sameDay}}
       </p>
     </div>
 
