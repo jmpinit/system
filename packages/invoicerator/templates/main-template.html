@@ -92,7 +92,10 @@
 
       <table class="key-value">
         <tr><td>From:</td><td>{{ myName }}</td></tr>
-        <tr><td>Hours:</td><td>{{ totalHours }} hours</td></tr>
+        <tr><td>Total Hours:</td><td>{{ totalHours }} hours</td></tr>
+        {{#discountedHours}}
+        <tr><td>Discounted Hours:</td><td>{{ discountedHours }} hours</td></tr>
+        {{/discountedHours}}
         <tr><td>Rate:</td><td>${{ rate }}/hr</td></tr>
         <tr><td>Payment due:</td><td>${{ paymentDue }}</td></tr>
         <tr><td>Payment method:</td><td>{{ paymentMethod }}</td></tr>
@@ -107,7 +110,7 @@
         <table>
           <tr><th>Project</th><th>Hours</th><th>Cost</th></tr>
           {{#projectSummary}}
-          <tr><td>{{ project }}</td><td>{{ hours }}</td><td>{{ cost }}</td></tr>
+          <tr><td>{{ project }}</td><td>{{ hours }}{{#discountedHours}} - {{ discountedHours }}{{/discountedHours}}</td><td>{{ cost }}</td></tr>
           {{/projectSummary}}
         </table>
       </div>
@@ -121,7 +124,7 @@
         <table>
           <tr>{{#displayProject}}<th>Project</th>{{/displayProject}}<th class="hours">Hours</th><th>Description</th></tr>
           {{#timeLog}}
-          <tr>{{#displayProject}}<td>{{ Project }}</td>{{/displayProject}}<td class="hours">{{ Hours }}</td><td>{{ Description }}</td></tr>
+          <tr>{{#displayProject}}<td>{{ project }}</td>{{/displayProject}}<td class="hours">{{ hours }}{{#discountedHours}} - {{ discountedHours }}{{/discountedHours}}</td><td>{{ description }}</td></tr>
           {{/timeLog}}
         </table>
       </div>
