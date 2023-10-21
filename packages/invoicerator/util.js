@@ -29,8 +29,13 @@ function roundTwo(num) {
   return (Math.round(num * 100) / 100).toFixed(2);
 }
 
+function roundUpTwo(num) {
+  return (Math.ceil(num * 100) / 100).toFixed(2);
+}
+
 module.exports = {
   makeTempFile,
   fileExists,
   roundTwo,
+  roundUpTwo,
 };

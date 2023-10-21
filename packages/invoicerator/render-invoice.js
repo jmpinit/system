@@ -6,7 +6,7 @@ const fs = require('fs/promises');
 const path = require('path');
 const puppeteer = require('puppeteer');
 const Mustache = require('mustache');
-const { makeTempFile, fileExists, roundTwo } = require('./util');
+const { makeTempFile, fileExists, roundTwo, roundUpTwo } = require('./util');
 
 function formatDate(date) {
   // HACK:
@@ -41,10 +41,10 @@ async function renderInvoiceHTML(templateFilePath, startDate, endDate, timeLog, 
     : config.client.fields.indexOf('Project') !== -1;
 
   // Format the time log
-  const formattedTimeLog = timeLog.map(({Project, Description, Hours}) => ({
+  const formattedTimeLog = timeLog.map(({ Project, Description, Minutes }) => ({
     Project,
     Description,
-    Hours: roundTwo(Hours),
+    Hours: roundUpTwo(Minutes / 60),
   }));
 
   // Calculate report values
@@ -58,7 +58,7 @@ async function renderInvoiceHTML(templateFilePath, startDate, endDate, timeLog, 
 
   const hoursByProject = timeLog.reduce((projects, entry) => {
     const hours = (projects[entry.Project] || 0) + entry.Minutes / 60;
-    return {...projects, [entry.Project]: hours};
+    return { ...projects, [entry.Project]: hours };
   }, {});
 
   // Find when the work started and ended exactly
@@ -66,13 +66,11 @@ async function renderInvoiceHTML(templateFilePath, startDate, endDate, timeLog, 
   const workDates = timeLog.map((entry) => entry.Date);
   const workStartDate = new Date(Math.min(...workDates));
   const workEndDate = new Date(Math.max(...workDates));
-  // const workStartDate = startDate;
-  // const workEndDate = endDate;
 
   const projectSummary = Object.entries(hoursByProject)
     .map(([project, hours]) => ({
       project: displayProject ? project : undefined,
-      hours: roundTwo(hours),
+      hours: roundUpTwo(hours),
       cost: `$${roundTwo(hours * config.client.rate)}`,
     }));
 
@@ -105,7 +103,7 @@ async function renderInvoiceHTML(templateFilePath, startDate, endDate, timeLog, 
     startDate: formatDate(workStartDate),
     endDate: formatDate(workEndDate),
     myName: config.user.name,
-    totalHours: roundTwo(totalHours),
+    totalHours: roundUpTwo(totalHours),
     rate: config.client.rate,
     paymentDue: roundTwo(paymentDue),
     displayProject,
